@@ -8,9 +8,9 @@ public interface IMatchService
 {
     /// <summary>Match board: all active matches ordered by date.</summary>
     Task<IEnumerable<MatchDto>> GetBoardAsync
-        (MatchStatus? status = null);
+        (MatchStatus? status = null, string? search = null); // WORKSHOP: line added ( string? search = null)
 
-      Task<MatchDetailDto?> GetDetailAsync(int id);
+    Task<MatchDetailDto?> GetDetailAsync(int id);
     Task<MatchFormDto?> GetForEditAsync(int id);
     Task CreateAsync(MatchFormDto dto);
     Task UpdateAsync(MatchFormDto dto);

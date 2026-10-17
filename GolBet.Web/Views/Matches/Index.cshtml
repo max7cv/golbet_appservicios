@@ -8,21 +8,31 @@
 
 @{
     var current = (MatchStatus?)ViewBag.CurrentStatus;
+    var currentSearch = (string?)ViewBag.CurrentSearch; // WORKSHOP: line added
 }
+<form asp-action="Index" method="get" class="d-flex gap-2 mb-3">
+    @if (current.HasValue)
+    {
+        <input type="hidden" name="status" value="@current" />
+    }
+    <input type="text" name="search" value="@currentSearch" class="form-control" placeholder="Buscar por equipo..." />  
+    <button type="submit" class="btn btn-success">Buscar</button>
+</form>
+
 <div class="d-flex gap-2 flex-wrap mb-4">
-    <a asp-action="Index"
-       class="btn btn-sm @(current is null ? "btn-success" : "btn-outline-success")">
+    <a asp-action="Index" asp-route-search="@currentSearch"
+       class="btn btn-sm @(current is null ? "btn-success" : "btn-outline-success")"> 
         Todos
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Scheduled" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.Scheduled ? "btn-success" : "btn-outline-success")">
         Programados
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress"
+    <a asp-action="Index" asp-route-status="@MatchStatus.InProgress" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.InProgress ? "btn-success" : "btn-outline-success")">
         En juego
     </a>
-    <a asp-action="Index" asp-route-status="@MatchStatus.Finished"
+    <a asp-action="Index" asp-route-status="@MatchStatus.Finished" asp-route-search="@currentSearch"
        class="btn btn-sm @(current == MatchStatus.Finished ? "btn-success" : "btn-outline-success")">
         Finalizados
     </a>
@@ -36,7 +46,21 @@
 }
 
 </div>
-
+@* WORKSHOP: line added  *@
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        @if (!string.IsNullOrWhiteSpace(currentSearch))
+        {
+            <h4>No hay partidos para “@currentSearch”</h4>
+        }
+        else
+        {
+            <h4>No hay partidos en esta categoría</h4>
+        }
+        <a asp-action="Index" class="btn btn-success mt-3">Volver a la cartelera de partidos</a>
+    </div>
+}
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
     @foreach (var match in Model)
     {
