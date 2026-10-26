@@ -45,6 +45,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 // Specific repositories
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
+builder.Services.AddScoped<IBetRepository, BetRepository>();
+builder.Services.AddScoped<IBetService, BetService>();
 
 // AutoMapper: scans the assembly containing MappingProfile for all profiles
 builder.Services.AddAutoMapper(typeof(MappingProfile));
